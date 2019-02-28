@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: rqlite
+    rqlite: node
+  name: rqlite-node
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      rqlite: node
+  template:
+    metadata:
+      labels:
+        run: rqlite
+        rqlite: node
+    spec:
+      containers:
+      - image: rjos3/surf-rqlite
+        imagePullPolicy: Always
+        name: rqlite-node
+        args: ["node"]
+        env:
+        - name: CLUSTER
+          value: "rqlite-cluster"
+        ports:
+        - name: rqlite-http
+          containerPort: 4001
+          protocol: TCP
+        - name: rqlite-raft
+          containerPort: 4002
+          protocol: TCP
+      restartPolicy: Always
+

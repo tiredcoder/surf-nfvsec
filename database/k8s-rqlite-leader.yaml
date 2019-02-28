@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: rqlite
+    rqlite: leader
+  name: rqlite-leader
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      rqlite: leader
+  template:
+    metadata:
+      labels:
+        run: rqlite
+        rqlite: leader
+    spec:
+      containers:
+      - image: rjos3/surf-rqlite
+        imagePullPolicy: Always
+        name: rqlite-leader
+        args: ["leader"]
+        env:
+        - name: CLUSTER
+          value: "rqlite-cluster"
+        ports:
+        - name: rqlite-http
+          containerPort: 4001
+          protocol: TCP
+        - name: rqlite-raft
+          containerPort: 4002
+          protocol: TCP
+      restartPolicy: Always
+

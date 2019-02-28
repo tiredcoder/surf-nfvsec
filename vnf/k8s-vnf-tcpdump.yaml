@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: surf-vnf-tcpdump
+  name: surf-vnf-tcpdump
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: surf-vnf-tcpdump
+  template:
+    metadata:
+      labels:
+        run: surf-vnf-tcpdump
+      annotations:
+        k8s.v1.cni.cncf.io/networks: underlay-conf@underlay
+    spec:
+      runtimeClassName: kata-nemu
+      containers:
+      - image: rjos3/surf-vnf-tcpdump
+        imagePullPolicy: IfNotPresent
+        name: surf-vnf-tcpdump
+        args: ["default"]
+        env:
+        - name: FILTER
+          value: "-i underlay icmp"
+        - name: DATA_NET
+          value: "10.200"
+        - name: NFV_CTRL
+          value: "surf-nfv-controller"
+      nodeSelector:
+        kata-containers.io/kata-runtime: 'true'
+      restartPolicy: Always
+

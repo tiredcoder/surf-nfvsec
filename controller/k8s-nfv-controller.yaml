@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: surf-nfv-controller
+  name: surf-nfv-controller
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: surf-nfv-controller
+  template:
+    metadata:
+      labels:
+        run: surf-nfv-controller
+    spec:
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: ssh-key-lb
+          defaultMode: 256
+      containers:
+      - image: rjos3/surf-ctrl
+        imagePullPolicy: Always
+        name: surf-nfv-controller
+        args: ["default"]
+        env:
+        - name: DBSERV
+          value: "rqlite-cluster"
+        - name: LB
+          value: "192.168.122.1"
+        ports:
+        - name: ctrl-http
+          containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - name: secret-volume
+          readOnly: true
+          mountPath: "/etc/secret-volume"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: surf-nfv-controller
+spec:
+  ports:
+  - name: ctrl-http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: surf-nfv-controller
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: surf-nfv-controller-nodeip
+spec:
+  ports:
+  - name: ctrl-http
+    port: 8888
+    protocol: TCP
+    targetPort: 80
+    nodePort: 30007
+  selector:
+    run: surf-nfv-controller
+  sessionAffinity: None
+  type: NodePort
+

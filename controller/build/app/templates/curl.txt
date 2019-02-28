@@ -1,0 +1,42 @@
+# curl commands to interact with the web API
+# Only add/delete one entry at a time.
+
+# Init database
+curl --request PUT http://localhost:80/api/db/init
+
+# Flush database (delete all tables)
+curl --request PUT http://localhost:80/api/db/flush
+
+# Get all VNFs/edu/rules
+curl http://localhost:80/api/vnf
+curl http://localhost:80/api/edu
+curl http://localhost:80/api/rules
+
+# Get specific VNF/edu/rule
+curl http://localhost:80/api/vnf/<id>
+curl http://localhost:80/api/edu/<id>
+curl http://localhost:80/api/rules/<id>
+
+# Delete VNF/edu with <id>
+curl --request DELETE http://localhost:80/api/vnf/<id>
+curl --request DELETE http://localhost:80/api/edu/<id>
+curl --request DELETE http://localhost:80/api/rules/<id>
+
+# Add VNF
+curl --header "Content-Type: application/json" \
+  --request PUT \
+  --data '{"class":"FaaS","ip":"10.0.0.200"}' \
+  http://localhost:80/api/vnf
+
+# Add edu
+curl --header "Content-Type: application/json" \
+  --request PUT \
+  --data '{"name":"UvA","ip":"10.0.0.1"}' \
+  http://localhost:80/api/edu
+
+# Add rule
+curl --header "Content-Type: application/json" \
+  --request PUT \
+  --data '{"edu_ip":"10.0.0.1","vnf_ip":"10.0.0.200"}' \
+  http://localhost:80/api/rules
+
