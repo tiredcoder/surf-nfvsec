@@ -4,7 +4,7 @@ Network Functions Virtualization and Security: Offering campus security by lever
 This repo contains the K8S deployment and build files that were used to create the PoC.
 
 The images can also be found on Docker hub:
-hub.docker.com/u/rjos3
+https://hub.docker.com/u/rjos3
 
 Presentation:
 https://homepages.staff.os3.nl/~delaat/rp/2018-2019/p11/presentation.pdf
