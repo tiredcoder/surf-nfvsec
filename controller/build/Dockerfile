@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
  && pip3 install --trusted-host pypi.python.org Flask==1.0.2 ./pyrqlite \
  && rm -rf ./pyrqlite \
  && chmod +x /surf/init.sh \
- && chmod +x /surf/app/lb-ctrl.sh \
+ && chmod +x /surf/app/infra-ctrl.sh \
  && rm -rf /var/lib/apt/lists/*
 EXPOSE 80
 ENV LC_ALL=C.UTF-8

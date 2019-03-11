@@ -4,7 +4,7 @@
 # Author: Rik Janssen <Rik.Janssen@os3.nl>
 #
 # Project: UvA, SNE/OS3, RP2
-# Version: 1.0, Feb. 2019
+# Version: 1.1, Mar. 2019
 # Dependencies:
 #  Flask (v1.0.2)
 #  rqlite (v5, master branch, commit 4f9965d20aff6d03521c2b70d3514516a9b5251f)
@@ -113,8 +113,8 @@ def delete_db(table, id):
 # Load balancer functions
 
 # Create or remove rule
-def ctrl_lb(cmd, edu, vnf):
-  subprocess.run(["/bin/bash", "/surf/app/lb-ctrl.sh", cmd, edu, vnf])
+def ctrl_infra(cmd, edu, vnf):
+  subprocess.run(["/bin/bash", "/surf/app/infra-ctrl.sh", cmd, edu, vnf])
 
 
 # Routes
@@ -199,7 +199,7 @@ def mutate_rules():
         if request.headers['Content-Type'] == 'application/json':
             data = request.get_json()
             rule = insert_db('rules', ('edu','vnf'), (data['edu_ip'], data['vnf_ip']))
-            ctrl_lb('add', data['edu_ip'], data['vnf_ip'])
+            ctrl_infra('add', data['edu_ip'], data['vnf_ip'])
             return json.dumps(rule)
         else:
             return '415 Unsupported Media Type'
@@ -213,7 +213,7 @@ def mutate_rule(ruleid):
     if request.method == 'DELETE':
         res = query_db('SELECT * FROM rules WHERE id = ?', ruleid, one=True)
         rule = delete_db('rules', ruleid)
-        ctrl_lb('del', res['edu'], res['vnf'])
+        ctrl_infra('del', res['edu'], res['vnf'])
         return json.dumps(rule)
 
 

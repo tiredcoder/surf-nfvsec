@@ -27,7 +27,7 @@ spec:
         env:
         - name: DBSERV
           value: "rqlite-cluster"
-        - name: LB
+        - name: II
           value: "192.168.122.1"
         ports:
         - name: ctrl-http
