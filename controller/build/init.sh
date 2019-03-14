@@ -11,7 +11,7 @@
 # Default CMD
 if [ "$1" = 'default' ]; then
   mkdir -p /root/.ssh
-  ssh-keyscan "$LB" > ~/.ssh/known_hosts
+  ssh-keyscan "$II" > ~/.ssh/known_hosts
 
   # CMD
   gosu root /surf/app/nfv_controller.py
